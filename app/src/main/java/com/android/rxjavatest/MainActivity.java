@@ -15,12 +15,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.functions.Predicate;
 import io.reactivex.rxjava3.observers.DisposableObserver;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -159,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
-        mJOperator.filterOperator().filter(new Predicate<User>() {
+        /*mJOperator.filterOperator().filter(new Predicate<User>() {
             @Override
             public boolean test(User user) throws Throwable {
 
@@ -189,7 +192,81 @@ public class MainActivity extends AppCompatActivity {
             public void onComplete() {
 
             }
+        });*/
+
+        /* mJOperator.lastOperator()
+                //.last(new User(1,"demo1",15))
+                .lastOrError()
+                .subscribe(new SingleObserver<User>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull User user) {
+                        Log.e(TAG,user.name);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });*/
+
+        /*mJOperator.distinctOperator().distinct(new Function<User, Object>() {
+            @Override
+            public Object apply(User user) throws Throwable {
+
+                return user.name;
+            }
+        }).subscribe(new Observer<User>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@NonNull User user) {
+                Log.e(TAG,user.name);
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });*/
+
+        mJOperator.skipOperator()
+                .skip(100,TimeUnit.MICROSECONDS)
+                .subscribe(new Observer<User>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                Log.e(TAG,"onSubscribe");
+            }
+
+            @Override
+            public void onNext(@NonNull User user) {
+                Log.e(TAG,user.name);
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                Log.e(TAG,"onError");
+            }
+
+            @Override
+            public void onComplete() {
+                Log.e(TAG,"onComplete");
+            }
         });
+
+
     }
 
     void getLocation(){
