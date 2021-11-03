@@ -21,10 +21,10 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class JOperator {
     String TAG = getClass().getSimpleName();
 
-    ArrayList mListNum = new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
-    ArrayList arrayList1 = new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
-    ArrayList arrayList2 = new ArrayList<Integer>(Arrays.asList(10, 20, 30, 40, 50, 60, 70));
-    ArrayList mUserList = new ArrayList<User>(Arrays.asList(
+    static final ArrayList mListNum = new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
+    static final ArrayList arrayList1 = new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
+    static final ArrayList arrayList2 = new ArrayList<Integer>(Arrays.asList(10, 20, 30, 40, 50, 60, 70));
+    static final ArrayList mUserList = new ArrayList<User>(Arrays.asList(
             new User(1,"demo1",15),
             new User(2,"demo2",18),
             new User(3,"demo4",20),

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,17 +19,23 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.BackpressureStrategy;
 import io.reactivex.rxjava3.core.FlowableSubscriber;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableSource;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.core.SingleObserver;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Action;
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.functions.Predicate;
+import io.reactivex.rxjava3.internal.util.ConnectConsumer;
+import io.reactivex.rxjava3.observables.ConnectableObservable;
 import io.reactivex.rxjava3.observers.DisposableObserver;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import io.reactivex.rxjava3.subscribers.DisposableSubscriber;
@@ -41,6 +48,12 @@ public class MainActivity extends AppCompatActivity {
     private String TAG = "TAG";
     private JOperator mJOperator = new JOperator();
     private ObservableTest mObservableTest = new ObservableTest();
+    private ColdObservable coldObservable = new ColdObservable();
+    private TestSubject testSubject = new TestSubject();
+
+
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private HotObservable mHotObservable = new HotObservable();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -365,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
 
         //mObservableTest.createMaybeObservable().subscribe(mObservableTest.observerMayObservable());
         //mObservableTest.createCompletableObservable().subscribe(mObservableTest.observerCompletableObservable());
-        mObservableTest.createFlowableObservableT2()
+        /*mObservableTest.createFlowableObservableT2()
                 .toFlowable(BackpressureStrategy.LATEST)
                 .observeOn(Schedulers.io(),false, 2)
 
@@ -384,7 +397,129 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete() {
                         Log.e(TAG,"onComplete");
                     }
-                });
+                });*/
+        /*compositeDisposable.add(
+                mObservableTest
+                        .createObservable()
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(integer -> {
+                                    Log.e(TAG, integer.toString());
+                                }
+                                , throwable -> {
+                                    Log.e(TAG,throwable.toString());
+                                }
+                                , () -> {
+                                    Log.e(TAG,"complete");
+                                }
+
+                        ));*/
+        /*compositeDisposable.add(
+                Observable.just(mObservableTest.mUserList)
+                        .subscribeOn(Schedulers.io())
+                        .flatMap(arrayList -> {
+
+                            Log.e(TAG,"Upstream ThreadName :"+ Thread.currentThread().getName());
+                            return Observable.fromIterable(arrayList);
+
+                        })
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                it -> {
+                                    Log.e(TAG,"onNext" +((User)it).age +" Thread name " + Thread.currentThread().getName());
+                                    //Toast.makeText(this,"onNext" +((User)it).age +" Thread name " + Thread.currentThread().getName(),Toast.LENGTH_SHORT).show();
+                                }, it -> {
+                                    Log.e(TAG,"onError"+ it.toString());
+                                }, () -> {
+                                    Log.e(TAG, "complete");
+                                }
+
+                        )
+
+        );*/
+        /*coldObservable.coldObservable().subscribe(coldObservable.coldObserver());
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        coldObservable.coldObservable().subscribe(coldObservable.coldObserver());
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        coldObservable.coldObservable().subscribe(coldObservable.coldObserver());*/
+        /*ConnectableObservable<User> connectableObservable = mHotObservable.hotObservable();
+
+        connectableObservable
+                .subscribe(
+                it -> {
+                    Log.e(TAG,"onNext "+it.id);
+                },
+                it -> {
+                    Log.e(TAG,"onError "+it);
+                }
+                , () -> {
+                    Log.e(TAG,"complete ");
+                }
+        );
+
+        connectableObservable.connect();*/
+        //Disposable hotObservable = mHotObservable.hotObservable().connect();
+        /*coldObservable.coldObservable().subscribe(coldObservable.coldObserver());
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        coldObservable.coldObservable().subscribe(coldObservable.coldObserver());
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        coldObservable.coldObservable().subscribe(coldObservable.coldObserver());*/
+
+        /*ConnectableObservable<Long> connectableObservable = mHotObservable.hotObservableTwo();
+        connectableObservable.connect();
+        connectableObservable.subscribe(
+                it->{
+                  Log.e(TAG,"onNext 1st : "+it.toString());
+                },
+                it->{
+                    Log.e(TAG,"onError "+it);
+                },
+                ()->{
+                    Log.e(TAG, "onComplete");
+                }
+        );
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        connectableObservable.subscribe(
+                it->{
+                    Log.e(TAG,"onNext 2st : "+it.toString());
+                },
+                it->{
+                    Log.e(TAG,"onError 2st"+it);
+                },
+                ()->{
+                    Log.e(TAG, "onComplete 2st");
+                }
+        );*/
+        //testSubject.asyncSubject();
+        //testSubject.asyncSubjectTwo();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.clear();
+        Log.e("onDestroy", "onDestroy");
+
     }
 
     void getLocation() {

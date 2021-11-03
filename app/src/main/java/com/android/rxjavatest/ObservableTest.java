@@ -29,6 +29,8 @@ import io.reactivex.rxjava3.disposables.Disposable;
 
 public class ObservableTest {
 
+    public Disposable disposable;
+
     ArrayList mUserList = new ArrayList<User>(Arrays.asList(
             new User(1,"demo1",15),
             new User(2,"demo2",18),
@@ -48,7 +50,7 @@ public class ObservableTest {
             public void subscribe(@NonNull ObservableEmitter<Integer> emitter) throws Throwable {
                 try {
                     if (!emitter.isDisposed()){
-                        for (int i =0; i <100 ; i++){
+                        for (int i =0; i <10 ; i++){
                             emitter.onNext(i);
                         }
                         emitter.onComplete();
@@ -108,6 +110,7 @@ public class ObservableTest {
         return new Observer<Integer>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
+                disposable = d;
                 Log.e("TAG","onSubscribe");
             }
 
@@ -211,4 +214,6 @@ public class ObservableTest {
         }
         Log.e("TAG","latitude 1.23.23");
     }
+
+
 }
