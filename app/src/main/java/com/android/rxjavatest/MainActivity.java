@@ -511,7 +511,9 @@ public class MainActivity extends AppCompatActivity {
         );*/
         //testSubject.asyncSubject();
         //testSubject.asyncSubjectTwo();
-
+        //testSubject.behaviorSubject();
+        //testSubject.publishSubject();
+        testSubject.replaySubject();
     }
 
     @Override

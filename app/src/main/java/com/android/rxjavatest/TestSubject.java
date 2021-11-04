@@ -7,6 +7,9 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.functions.Predicate;
 import io.reactivex.rxjava3.subjects.AsyncSubject;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
+import io.reactivex.rxjava3.subjects.PublishSubject;
+import io.reactivex.rxjava3.subjects.ReplaySubject;
 
 public class TestSubject {
     private String TAG = getClass().getSimpleName();
@@ -100,6 +103,85 @@ public class TestSubject {
                     Log.e(TAG,"onCompleted4");
                 }
         );
+    }
+
+    public void behaviorSubject(){
+
+        BehaviorSubject<String> subject = BehaviorSubject.create();
+
+        subject.subscribe(
+                it -> Log.e("onNext 1 ",it)
+                ,
+                throwable -> Log.e(TAG,"error1 "+ throwable)
+                ,
+                () -> Log.e(TAG,"oncomplete")
+        );
+        subject.onNext("red");
+        subject.onNext("yellow");
+        subject.onNext("black");
+        subject.onNext("green");
+        subject.subscribe(
+                it -> Log.e("onNext 2 ",it)
+                ,
+                throwable -> Log.e(TAG,"error2 "+ throwable)
+                ,
+                () -> Log.e(TAG,"oncomplete2")
+        );
+        subject.onNext("dragon");
+        subject.onComplete();
+
+    }
+
+    public void publishSubject(){
+        PublishSubject<String> subject = PublishSubject.create();
+
+        subject.subscribe(
+                it -> Log.e("onNext 1 ",it)
+                ,
+                throwable -> Log.e(TAG,"error1 "+ throwable)
+                ,
+                () -> Log.e(TAG,"oncomplete")
+        );
+        subject.onNext("red");
+        subject.onNext("green");
+        subject.subscribe(
+                it -> Log.e("onNext 2 ",it)
+                ,
+                throwable -> Log.e(TAG,"error2 "+ throwable)
+                ,
+                () -> Log.e(TAG,"oncomplete2")
+        );
+        subject.onNext("blue");
+        subject.onNext("blue2");
+        subject.onComplete();
+
+    }
+
+    public void replaySubject(){
+        ReplaySubject<String> subject = ReplaySubject.create();
+        subject.onNext("red");
+        subject.onNext("green");
+        subject.subscribe(
+                it -> Log.e(TAG,"onNext1 "+it.toString())
+                , throwable -> Log.e(TAG,"onError1 "+throwable)
+                , () -> Log.e(TAG,"onComplete1")
+        );
+        subject.onNext("red");
+        subject.onNext("green");
+        subject.onNext("red");
+        subject.onNext("green");
+        subject.onNext("red");
+        subject.onNext("green");
+
+        subject.subscribe(
+                it -> Log.e(TAG,"onNext2 "+it.toString())
+                , throwable -> Log.e(TAG,"onError2 "+throwable)
+                , () -> Log.e(TAG,"onComplete2")
+        );
+        subject.onNext("blue");
+        subject.onComplete();
+
+
     }
 
 }
