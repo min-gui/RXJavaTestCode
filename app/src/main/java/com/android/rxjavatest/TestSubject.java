@@ -5,6 +5,7 @@ import android.util.Log;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.functions.Predicate;
 import io.reactivex.rxjava3.subjects.AsyncSubject;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
@@ -161,6 +162,12 @@ public class TestSubject {
         ReplaySubject<String> subject = ReplaySubject.create();
         subject.onNext("red");
         subject.onNext("green");
+        subject.doOnNext(new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Throwable {
+                Log.e(TAG, s+" 뭐지");
+            }
+        });
         subject.subscribe(
                 it -> Log.e(TAG,"onNext1 "+it.toString())
                 , throwable -> Log.e(TAG,"onError1 "+throwable)
@@ -173,7 +180,7 @@ public class TestSubject {
         subject.onNext("red");
         subject.onNext("green");
 
-        subject.subscribe(
+        subject.doOnNext(it -> Log.e(TAG,"보자 "+it)).subscribe(
                 it -> Log.e(TAG,"onNext2 "+it.toString())
                 , throwable -> Log.e(TAG,"onError2 "+throwable)
                 , () -> Log.e(TAG,"onComplete2")
